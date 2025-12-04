@@ -1,0 +1,56 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+	id 'java-library'
+    id 'maven-publish'
+    id 'org.springframework.boot' version '4.0.0' apply false
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.edertone'
+version = '0.0.1-SNAPSHOT'
+description = 'TurboDepot Spring'
+
+ext {
+    hypersistence_utils_version = '3.12.0'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+    withSourcesJar()
+    withJavadocJar()
+}
+
+repositories {
+	mavenCentral()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    // Core
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'org.springframework.boot:spring-boot-starter-security'
+    api 'org.springframework.boot:spring-boot-starter-web'
+
+    // JPA
+    api "io.hypersistence:hypersistence-utils-hibernate-71:${project.hypersistence_utils_version}"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
