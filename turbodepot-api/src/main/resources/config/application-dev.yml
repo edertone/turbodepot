@@ -1,0 +1,15 @@
+#
+# Spring Properties
+#
+spring:
+  datasource:
+    username: devuser
+    password: devpassword
+
+#
+# Custom application properties
+#
+turbodepot-api:
+  datasource:
+    host: localhost
+    database: turbodepot_api
