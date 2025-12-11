@@ -1,0 +1,27 @@
+name: turbodepot-api-dev
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  database:
+    image: mariadb:12.1.2
+    container_name: turbodepot-api-dev-mariadb
+    logging: *default-logging
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: turbodepot_api
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpassword
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - turbodepot-api-dev-mariadb-data:/var/lib/mysql
+
+volumes:
+  turbodepot-api-dev-mariadb-data:
+    name: "turbodepot-api-dev-mariadb-data"
