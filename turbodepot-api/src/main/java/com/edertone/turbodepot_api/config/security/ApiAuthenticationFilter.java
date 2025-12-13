@@ -50,7 +50,7 @@ public class ApiAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.userTokenService = userTokenService;
         this.jsonMapper = jsonMapper;
 
-        setFilterProcessesUrl(WebConstants.DEFAULT_AUTH_LOGIN_URL);
+        setFilterProcessesUrl(WebConstants.AUTH_LOGIN_URL);
         setAuthenticationFailureHandler(authenticationFailureHandler);
     }
 
@@ -66,9 +66,9 @@ public class ApiAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throw new AuthenticationServiceException("Content type not supported: " + request.getContentType());
         }
 
-        var username = requireParameter(request, WebConstants.DEFAULT_PARAM_USERNAME);
-        var tenant = requireParameter(request, WebConstants.DEFAULT_PARAM_TENANT);
-        var password = requireParameter(request, WebConstants.DEFAULT_PARAM_PASSWORD);
+        var username = requireParameter(request, WebConstants.PARAM_USERNAME);
+        var tenant = requireParameter(request, WebConstants.PARAM_TENANT);
+        var password = requireParameter(request, WebConstants.PARAM_PASSWORD);
 
         var preAuthentication = UsernameTenantPasswordAuthenticationToken.unauthenticated(username, password, tenant);
         return authenticationManager.authenticate(preAuthentication);

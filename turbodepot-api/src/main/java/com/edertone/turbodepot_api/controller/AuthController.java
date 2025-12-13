@@ -42,7 +42,7 @@ public class AuthController {
             )
         }
     )
-    @PostMapping(value = WebConstants.DEFAULT_AUTH_LOGIN_URL,
+    @PostMapping(value = WebConstants.AUTH_LOGIN_URL,
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void login(
         @Parameter(description = "Username", required = true, example = "user@example.com")
@@ -51,6 +51,38 @@ public class AuthController {
         @RequestParam String password,
         @Parameter(description = "Tenant identifier", required = true, example = "tenant1")
         @RequestParam String tenant
+    ) {
+        throw new IllegalStateException("This method should never be called");
+    }
+
+    @Operation(
+        summary = "User logout",
+        description = "Logout a user",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Successful logout"
+            )
+        }
+    )
+    @PostMapping(value = WebConstants.AUTH_LOGOUT_URL)
+    public void logout(
+    ) {
+        throw new IllegalStateException("This method should never be called");
+    }
+
+    @Operation(
+        summary = "Check token",
+        description = "Check authentication token",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Successful logout"
+            )
+        }
+    )
+    @PostMapping(value = WebConstants.AUTH_CHECK_URL)
+    public void checkToken(
     ) {
         throw new IllegalStateException("This method should never be called");
     }

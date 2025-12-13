@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 /**
- * AuthUserToken entity.
+ * UserToken entity.
  */
 @Entity
 @Table(name = "usr_token",

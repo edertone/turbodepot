@@ -69,7 +69,8 @@ CREATE TABLE `usr_token`
     `dbexpirationdate` datetime(6)     NOT NULL,
     PRIMARY KEY (`dbid`),
     KEY `usr_token_usr_dbid_fk` (`usrdbid`),
-    CONSTRAINT `usr_token_usrdbid_fk` FOREIGN KEY (`usrdbid`) REFERENCES `usr_userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `usr_token_usrdbid_fk` FOREIGN KEY (`usrdbid`) REFERENCES `usr_userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE KEY `usr_token_token_uk` (`token`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
