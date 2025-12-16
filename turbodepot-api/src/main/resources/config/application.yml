@@ -10,7 +10,6 @@ spring:
     name: turbodepot-api
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://${turbodepot-api.datasource.host}:${turbodepot-api.datasource.port}/${turbodepot-api.datasource.database}?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -21,7 +20,6 @@ spring:
         useServerPrepStmts: true
       maximum-pool-size: 10
       minimum-idle: 5
-    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: validate
@@ -47,10 +45,3 @@ springdoc:
   api-docs:
     enabled: true
     path: /api-docs
-
-#
-# Custom application properties
-#
-turbodepot-api:
-  datasource:
-    port: 3306
