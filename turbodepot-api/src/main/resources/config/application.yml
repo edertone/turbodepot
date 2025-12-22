@@ -23,6 +23,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+      naming:
+        physical-strategy: com.edertone.turbodepot_api.support.jpa.TurboDepotApiPhysicalNamingStrategy
     properties:
       hibernate:
         show_sql: false
@@ -40,8 +42,17 @@ spring:
     locations: classpath:db/migration/turbodepot-api
     baseline-on-migrate: true
     table: _schema_version_turbodepot_api
+    placeholders:
+      table-prefix: ${turbodepot-api.model.table-prefix}
 
 springdoc:
   api-docs:
     enabled: true
     path: /api-docs
+
+#
+# Application properties
+#
+turbodepot-api:
+  model:
+    table-prefix: usr_

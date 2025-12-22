@@ -11,8 +11,7 @@ import java.util.Set;
 /**
  * User entity.
  */
-@Entity
-@Table(name = "usr_userobject")
+@Entity(name = "Userobject")
 public class User extends CommonEntity<User> {
 
     @Id

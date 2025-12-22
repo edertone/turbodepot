@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     @Query("""
-        select u from User u
+        select u from Userobject u
             join fetch u.tenant t
             join fetch u.password p
             join fetch u.customFields cf

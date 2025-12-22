@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
  * Operation role entity.
  */
 @Entity
-@Table(name = "usr_operation_role")
 public class OperationRole {
 
     @EmbeddedId

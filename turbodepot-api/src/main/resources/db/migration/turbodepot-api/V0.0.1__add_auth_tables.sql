@@ -1,5 +1,5 @@
 -- User tenant
-CREATE TABLE `usr_tenant`
+CREATE TABLE `${table-prefix}tenant`
 (
     `name`        varchar(250)  NOT NULL,
     `description` varchar(5000) NOT NULL,
@@ -8,41 +8,41 @@ CREATE TABLE `usr_tenant`
   DEFAULT CHARSET = utf8mb4;
 
 -- User operation
-CREATE TABLE `usr_operation`
+CREATE TABLE `${table-prefix}operation`
 (
     `tenant`      varchar(250) NOT NULL,
     `name`        varchar(250) NOT NULL,
     `description` varchar(250) NOT NULL,
     PRIMARY KEY (`tenant`, `name`),
-    CONSTRAINT `usr_operation_usr_tenant_fk` FOREIGN KEY (`tenant`) REFERENCES `usr_tenant` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `${table-prefix}operation_${table-prefix}tenant_fk` FOREIGN KEY (`tenant`) REFERENCES `${table-prefix}tenant` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User operation role
-CREATE TABLE `usr_operation_role`
+CREATE TABLE `${table-prefix}operation_role`
 (
     `tenant`    varchar(250) NOT NULL,
     `operation` varchar(250) NOT NULL,
     `role`      varchar(250) NOT NULL,
     PRIMARY KEY (`tenant`, `operation`, `role`),
-    CONSTRAINT `usr_operation_role_usr_tenant_fk` FOREIGN KEY (`tenant`) REFERENCES `usr_tenant` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `usr_operation_role_usr_operation_fk` FOREIGN KEY (`tenant`, `operation`) REFERENCES `usr_operation` (`tenant`, `name`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `${table-prefix}operation_role_${table-prefix}tenant_fk` FOREIGN KEY (`tenant`) REFERENCES `${table-prefix}tenant` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `${table-prefix}operation_role_${table-prefix}operation_fk` FOREIGN KEY (`tenant`, `operation`) REFERENCES `${table-prefix}operation` (`tenant`, `name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User role
-CREATE TABLE `usr_role`
+CREATE TABLE `${table-prefix}role`
 (
     `tenant`      varchar(250)  NOT NULL,
     `name`        varchar(250)  NOT NULL,
     `description` varchar(5000) NOT NULL,
     PRIMARY KEY (`tenant`, `name`),
-    CONSTRAINT `usr_role_usr_tenant_fk` FOREIGN KEY (`tenant`) REFERENCES `usr_tenant` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `${table-prefix}role_${table-prefix}tenant_fk` FOREIGN KEY (`tenant`) REFERENCES `${table-prefix}tenant` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User object
-CREATE TABLE `usr_userobject`
+CREATE TABLE `${table-prefix}userobject`
 (
     `dbid`               bigint unsigned NOT NULL AUTO_INCREMENT,
     `tenant`             varchar(250)    NOT NULL,
@@ -54,13 +54,13 @@ CREATE TABLE `usr_userobject`
     `description`        varchar(2000)   NULL,
     `data`               longtext        NULL,
     PRIMARY KEY (`dbid`),
-    UNIQUE KEY `usr_userobject_tenant_username_uk` (`tenant`, `username`),
-    UNIQUE KEY `usr_userobject_dbuuid_uk` (`dbuuid`)
+    UNIQUE KEY `${table-prefix}userobject_tenant_username_uk` (`tenant`, `username`),
+    UNIQUE KEY `${table-prefix}userobject_dbuuid_uk` (`dbuuid`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User token
-CREATE TABLE `usr_token`
+CREATE TABLE `${table-prefix}token`
 (
     `dbid`             bigint unsigned NOT NULL AUTO_INCREMENT,
     `usrdbid`          bigint unsigned NOT NULL,
@@ -68,14 +68,14 @@ CREATE TABLE `usr_token`
     `dbcreationdate`   datetime(6)     NOT NULL,
     `dbexpirationdate` datetime(6)     NOT NULL,
     PRIMARY KEY (`dbid`),
-    KEY `usr_token_usr_dbid_fk` (`usrdbid`),
-    CONSTRAINT `usr_token_usrdbid_fk` FOREIGN KEY (`usrdbid`) REFERENCES `usr_userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE,
-    UNIQUE KEY `usr_token_token_uk` (`token`)
+    KEY `${table-prefix}token_${table-prefix}dbid_fk` (`usrdbid`),
+    CONSTRAINT `${table-prefix}token_usrdbid_fk` FOREIGN KEY (`usrdbid`) REFERENCES `${table-prefix}userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE KEY `${table-prefix}token_token_uk` (`token`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User custom fields
-CREATE TABLE `usr_userobject_customfields`
+CREATE TABLE `${table-prefix}userobject_customfields`
 (
     `dbid`       bigint unsigned NOT NULL,
     `name`       varchar(100)    NOT NULL,
@@ -88,12 +88,12 @@ CREATE TABLE `usr_userobject_customfields`
     `district`   varchar(100)    NULL,
     `postalcode` varchar(20)     NULL,
     PRIMARY KEY (`dbid`),
-    CONSTRAINT `usr_userobject_customfields_usr_userobject_fk` FOREIGN KEY (`dbid`) REFERENCES `usr_userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `${table-prefix}userobject_customfields_${table-prefix}userobject_fk` FOREIGN KEY (`dbid`) REFERENCES `${table-prefix}userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User mails
-CREATE TABLE `usr_userobject_mail`
+CREATE TABLE `${table-prefix}userobject_mail`
 (
     `dbid`             bigint unsigned NOT NULL,
     `mail`             varchar(250)    NOT NULL,
@@ -102,27 +102,27 @@ CREATE TABLE `usr_userobject_mail`
     `comments`         varchar(1000)   NULL,
     `data`             longtext        NULL,
     PRIMARY KEY (`dbid`, `mail`),
-    CONSTRAINT `usr_userobject_mail_usr_userobject_fk` FOREIGN KEY (`dbid`) REFERENCES `usr_userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `${table-prefix}userobject_mail_${table-prefix}userobject_fk` FOREIGN KEY (`dbid`) REFERENCES `${table-prefix}userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User password
-CREATE TABLE `usr_userobject_password`
+CREATE TABLE `${table-prefix}userobject_password`
 (
     `dbid`     bigint unsigned NOT NULL,
     `password` varchar(500)    NOT NULL,
     PRIMARY KEY (`dbid`),
-    CONSTRAINT `usr_userobject_password_usr_userobject_fk` FOREIGN KEY (`dbid`) REFERENCES `usr_userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `${table-prefix}userobject_password_${table-prefix}userobject_fk` FOREIGN KEY (`dbid`) REFERENCES `${table-prefix}userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 -- User role
-CREATE TABLE `usr_userobject_role`
+CREATE TABLE `${table-prefix}userobject_role`
 (
     `dbid`       bigint unsigned NOT NULL,
     `value`      varchar(250)    NOT NULL,
     `arrayindex` bigint unsigned NOT NULL,
-    UNIQUE KEY `usr_userobject_role_dbid_arrayindex_uk` (`dbid`, `arrayindex`),
-    CONSTRAINT `usr_userobject_role_dbid_fk` FOREIGN KEY (`dbid`) REFERENCES `usr_userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
+    UNIQUE KEY `${table-prefix}userobject_role_dbid_arrayindex_uk` (`dbid`, `arrayindex`),
+    CONSTRAINT `${table-prefix}userobject_role_dbid_fk` FOREIGN KEY (`dbid`) REFERENCES `${table-prefix}userobject` (`dbid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

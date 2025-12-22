@@ -7,11 +7,7 @@ import java.util.Date;
 /**
  * UserToken entity.
  */
-@Entity
-@Table(name = "usr_token",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "token" })
-    })
+@Entity(name = "Token")
 public class UserToken {
 
     @Id

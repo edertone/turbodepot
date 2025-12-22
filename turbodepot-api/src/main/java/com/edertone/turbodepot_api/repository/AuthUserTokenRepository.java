@@ -21,7 +21,7 @@ public interface AuthUserTokenRepository extends JpaRepository<UserToken, Long>,
      * @return the number of deleted tokens
      */
     @Modifying
-    @Query("delete from UserToken ut where ut.expirationDate < current_timestamp")
+    @Query("delete from Token ut where ut.expirationDate < current_timestamp")
     int deleteExpiredTokens();
 
     /**

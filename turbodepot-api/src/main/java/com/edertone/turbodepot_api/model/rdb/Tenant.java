@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
  * Tenant entity.
  */
 @Entity
-@Table(name = "usr_tenant")
 public class Tenant {
 
     @Id

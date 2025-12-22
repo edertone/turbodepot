@@ -9,8 +9,7 @@ import java.util.Map;
 /**
  * User mail entity.
  */
-@Entity
-@Table(name = "usr_userobject_mail")
+@Entity(name = "UserobjectMail")
 public class UserMail {
 
     @EmbeddedId

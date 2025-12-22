@@ -6,7 +6,6 @@ import jakarta.persistence.*;
  * Operation entity.
  */
 @Entity
-@Table(name = "usr_operation")
 public class Operation {
 
     @EmbeddedId
