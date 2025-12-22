@@ -7,3 +7,10 @@ spring:
     username: devuser
     password: devpassword
     driver-class-name: org.mariadb.jdbc.Driver
+
+#
+# Application properties
+#
+turbodepot-api:
+  model:
+    table-prefix: my_custom_prefix
