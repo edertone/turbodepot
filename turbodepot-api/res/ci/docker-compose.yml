@@ -15,6 +15,7 @@ services:
       - "8080:8080"
     volumes:
       - ./application.yml:/app/config/application.yml
+      - ./logs:/app/logs
     depends_on:
       database:
         condition: service_healthy
