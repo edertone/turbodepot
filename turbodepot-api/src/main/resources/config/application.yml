@@ -1,0 +1,58 @@
+#
+# Spring Properties
+#
+server:
+  servlet:
+    context-path: /turbodepot-api
+
+spring:
+  application:
+    name: turbodepot-api
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+      maximum-pool-size: 10
+      minimum-idle: 5
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: com.edertone.turbodepot_api.support.jpa.TurboDepotApiPhysicalNamingStrategy
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        use_sql_comments: false
+        jdbc:
+          time_zone: UTC
+        connection:
+          provider_disables_autocommit: true
+        cache:
+          use_query_cache: false
+        generate_statistics: false
+    open-in-view: false
+  flyway:
+    locations: classpath:db/migration/turbodepot-api
+    baseline-on-migrate: true
+    table: _schema_version_turbodepot_api
+    placeholders:
+      table-prefix: ${turbodepot-api.model.table-prefix}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+
+#
+# Application properties
+#
+turbodepot-api:
+  model:
+    table-prefix: usr_

@@ -1,0 +1,16 @@
+#
+# Spring Properties
+#
+spring:
+  datasource:
+    url: jdbc:mariadb://database:3306/turbodepot_api?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: devuser
+    password: devpassword
+    driver-class-name: org.mariadb.jdbc.Driver
+
+#
+# Application properties
+#
+turbodepot-api:
+  model:
+    table-prefix: my_custom_prefix

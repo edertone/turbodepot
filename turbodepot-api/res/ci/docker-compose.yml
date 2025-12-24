@@ -1,0 +1,54 @@
+name: turbodepot-api
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  api:
+    image: edertone/turbodepot-api:0.0.1-snapshot
+    container_name: turbodepot-api
+    logging: *default-logging
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./application.yml:/app/config/application.yml
+      - ./logs:/app/logs
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - turbodepot-api-net
+
+  database:
+    image: mariadb:12.1.2
+    container_name: turbodepot-mariadb
+    logging: *default-logging
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: turbodepot_api
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpassword
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - turbodepot-api-mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - turbodepot-api-net
+
+volumes:
+  turbodepot-api-mariadb-data:
+    name: "turbodepot-api-mariadb-data"
+
+networks:
+  turbodepot-api-net:
+    name: turbodepot-api-net

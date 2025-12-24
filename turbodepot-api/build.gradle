@@ -1,0 +1,73 @@
+plugins {
+	id 'java'
+    id 'org.springframework.boot' version '4.0.0'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.edertone'
+description = 'TurboDepot API'
+
+ext {
+    hypersistence_utils_version = '3.12.0'
+    spring_doc_version = '2.6.0'
+    jaxb_version = '2.3.1'
+    swagger_parser_version = '2.1.23'
+    mapstruct_version = '1.6.3'
+    mariadb_java_client_version = '3.5.6'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    // Core
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-flyway'
+
+    // Persistence
+    implementation "io.hypersistence:hypersistence-utils-hibernate-71:${project.hypersistence_utils_version}"
+    implementation 'org.flywaydb:flyway-mysql'
+    runtimeOnly "org.mariadb.jdbc:mariadb-java-client:${project.mariadb_java_client_version}"
+
+    // OpenAPI and Swagger
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${project.spring_doc_version}"
+    implementation "io.swagger.parser.v3:swagger-parser:${project.swagger_parser_version}"
+    implementation "javax.xml.bind:jaxb-api:${project.jaxb_version}"
+
+    // Utils
+    implementation "org.mapstruct:mapstruct:${project.mapstruct_version}"
+
+    // Annotation processors
+    annotationProcessor "org.mapstruct:mapstruct-processor:${project.mapstruct_version}"
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.h2database:h2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Test annotation processors
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${project.mapstruct_version}"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+bootJar {
+    manifest {
+        attributes('Implementation-Version': project.version)
+    }
+}
+
+apply from: 'gradle/git-properties.gradle'

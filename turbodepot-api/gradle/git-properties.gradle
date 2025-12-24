@@ -1,0 +1,47 @@
+import java.text.SimpleDateFormat
+
+// Task moved out to keep build.gradle clean. This file defines `generateGitProps` and
+// wires it into `processResources` and the resources srcDir.
+
+// Generates one file named git.properties with the current git commit, branch and build time.
+tasks.register('generateGitProps') {
+    def outputDir = layout.buildDirectory.dir('generated-resources').get().asFile
+    def outputFile = layout.buildDirectory.file('generated-resources/git.properties').get().asFile
+    outputs.file outputFile
+    doLast {
+        outputDir.mkdirs()
+        def commit = 'unknown'
+        def branch = 'unknown'
+        def time = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date())
+
+        // Helper to safely execute git commands; returns null on failure
+        def safeGit = { List<String> args ->
+            try {
+                def proc = args.execute(null, project.rootDir)
+                proc.waitFor()
+                if (proc.exitValue() == 0) {
+                    return proc.in.text.trim()
+                }
+            } catch (Exception ignore) {
+                // ignore - fall through to return null
+            }
+            return null
+        }
+
+        try {
+            def c = safeGit(['git', 'rev-parse', '--short', 'HEAD'])
+            if (c) commit = c
+            def b = safeGit(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
+            if (b) branch = b
+        } catch (Exception ignore) {
+            // any unexpected failure should not break the build
+        }
+
+        outputFile.text = "git.commit.id.abbrev=${commit}\n"
+        outputFile << "git.branch=${branch}\n"
+        outputFile << "git.build.time=${time}\n"
+    }
+}
+
+processResources.dependsOn generateGitProps
+sourceSets.main.resources.srcDir layout.buildDirectory.dir('generated-resources')
