@@ -1367,6 +1367,11 @@ class UsersManager extends BaseStrictClass{
 
         if(count($user) === 1){
 
+            // Make sure user case matches
+            if ($user[0]->userName !== $userName) {
+                throw new UnexpectedValueException('Authentication failed');
+            }
+
             try {
 
                 $dbPassword = $this->_db->tableGetRows($this->_databaseObjectsManager

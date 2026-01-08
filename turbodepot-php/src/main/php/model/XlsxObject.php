@@ -115,30 +115,28 @@ class XlsxObject extends TableObject{
             return true;
         }
 
-        if($index > count($this->_sheets)){
+        if(!isset($this->_sheets[$index])){
 
             throw new UnexpectedValueException('Index '.$index.' exceeds number of sheets');
         }
 
-        // Reset the current xlsx table underlying data
-        parent::__construct();
-
-        // Use reflection to access the protected properties directly
+        // Use reflection to access the protected properties directly from the TableObject instance
         $sourceSheet = $this->_sheets[$index];
-        $reflection = new ReflectionClass(get_parent_class($this));
+        $reflection = new ReflectionClass(TableObject::class);
 
-        // Clone all the data on the sheet at the specified index to this actual xlsx instance
-        // This is very important for performance reasons, as it avoids copying the data cell by cell
+        // Copy all the data on the sheet at the specified index to this actual xlsx instance.
+        // PHP arrays are copied by value on assignment, so we simply retrieve and assign.
+        // This is highly performant compared to deep object cloning.
         $columnNamesProperty = $reflection->getProperty('_columnNames');
         $columnNamesProperty->setAccessible(true);
-        $this->_columnNames = clone $columnNamesProperty->getValue($sourceSheet);
+        $this->_columnNames = $columnNamesProperty->getValue($sourceSheet);
 
         $cellsProperty = $reflection->getProperty('_cells');
         $cellsProperty->setAccessible(true);
-        $this->_cells = clone $cellsProperty->getValue($sourceSheet);
+        $this->_cells = $cellsProperty->getValue($sourceSheet);
 
-        $this->_columnsCount = $this->_sheets[$index]->countColumns();
-        $this->_rowsCount = $this->_sheets[$index]->countRows();
+        $this->_columnsCount = $sourceSheet->countColumns();
+        $this->_rowsCount = $sourceSheet->countRows();
         $this->_activeSheet = $index;
 
         return true;

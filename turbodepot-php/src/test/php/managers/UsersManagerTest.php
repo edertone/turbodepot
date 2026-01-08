@@ -736,10 +736,10 @@ class UsersManagerTest extends TestCase {
 
         $this->sut->saveUserMail('user', 'test2@email2.com', 'comments2');
         $this->assertSame([
-            ['dbid' => '1', 'mail' => 'test@email.com', 'isverified' => '0',
-                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test@email.com'), 'comments' => '', 'data' => 'data1'],
             ['dbid' => '1', 'mail' => 'test2@email2.com', 'isverified' => '0',
-                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test2@email2.com'), 'comments' => 'comments2', 'data' => '']
+                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test2@email2.com'), 'comments' => 'comments2', 'data' => ''],
+            ['dbid' => '1', 'mail' => 'test@email.com', 'isverified' => '0',
+                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test@email.com'), 'comments' => '', 'data' => 'data1']
         ], $this->db->tableGetRows('usr_userobject_mails', ['dbid' => 1], 'mail ASC'));
 
         $this->sut->saveUserMail('user', 'test2@email2.com');
@@ -747,12 +747,12 @@ class UsersManagerTest extends TestCase {
 
         $this->sut->saveUserMail('user', 'test3@email3.com', 'comments3', 'data3');
         $this->assertSame([
-            ['dbid' => '1', 'mail' => 'test@email.com', 'isverified' => '0',
-                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test@email.com'), 'comments' => '', 'data' => 'data1'],
             ['dbid' => '1', 'mail' => 'test2@email2.com', 'isverified' => '0',
                 'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test2@email2.com'), 'comments' => '', 'data' => ''],
             ['dbid' => '1', 'mail' => 'test3@email3.com', 'isverified' => '0',
-                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test3@email3.com'), 'comments' => 'comments3', 'data' => 'data3']
+                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test3@email3.com'), 'comments' => 'comments3', 'data' => 'data3'],
+            ['dbid' => '1', 'mail' => 'test@email.com', 'isverified' => '0',
+                'verificationhash' => $this->sut->getUserMailVerificationHash('user', 'test@email.com'), 'comments' => '', 'data' => 'data1']
         ], $this->db->tableGetRows('usr_userobject_mails', ['dbid' => 1], 'mail ASC'));
 
         // Test wrong values
@@ -1039,15 +1039,15 @@ class UsersManagerTest extends TestCase {
 
         // Get verified and non verified emails
         $this->assertSame([
-                            ['mail' => 'test@email.com', 'isverified' => false],
                             ['mail' => 'test2@email2.com', 'isverified' => false],
-                            ['mail' => 'test3@email3.com', 'isverified' => false]
+                            ['mail' => 'test3@email3.com', 'isverified' => false],
+                            ['mail' => 'test@email.com', 'isverified' => false]
                           ], $this->sut->getUserMails('user'));
 
         $this->assertSame([
-                            ['mail' => 'test@email.com', 'isverified' => false],
                             ['mail' => 'test2@email2.com', 'isverified' => false],
-                            ['mail' => 'test3@email3.com', 'isverified' => false]
+                            ['mail' => 'test3@email3.com', 'isverified' => false],
+                            ['mail' => 'test@email.com', 'isverified' => false]
                           ], $this->sut->getUserMails('user', 'NONVERIFIED'));
 
         // get only verified emails
@@ -1060,9 +1060,9 @@ class UsersManagerTest extends TestCase {
         $this->assertTrue($this->sut->setUserMailVerified('user', 'test@email.com', true));
 
         $this->assertSame([
-                            ['mail' => 'test@email.com', 'isverified' => true],
                             ['mail' => 'test2@email2.com', 'isverified' => true],
-                            ['mail' => 'test3@email3.com', 'isverified' => true]
+                            ['mail' => 'test3@email3.com', 'isverified' => true],
+                            ['mail' => 'test@email.com', 'isverified' => true]
                           ], $this->sut->getUserMails('user', 'VERIFIED'));
 
         $this->assertTrue($this->sut->setUserMailVerified('user', 'test@email.com', false));
@@ -1076,17 +1076,17 @@ class UsersManagerTest extends TestCase {
         $this->assertTrue($this->sut->setUserMailVerified('user', 'test@email.com', false));
 
         $this->assertSame([
-                            ['mail' => 'test@email.com', 'isverified' => false],
                             ['mail' => 'test2@email2.com', 'isverified' => false],
-                            ['mail' => 'test3@email3.com', 'isverified' => false]
+                            ['mail' => 'test3@email3.com', 'isverified' => false],
+                            ['mail' => 'test@email.com', 'isverified' => false]
 
                           ], $this->sut->getUserMails('user', 'NONVERIFIED'));
 
         $this->assertTrue($this->sut->setUserMailVerified('user', 'test2@email2.com', true));
 
         $this->assertSame([
-                            ['mail' => 'test@email.com', 'isverified' => false],
-                            ['mail' => 'test3@email3.com', 'isverified' => false]
+                            ['mail' => 'test3@email3.com', 'isverified' => false],
+                            ['mail' => 'test@email.com', 'isverified' => false]
                           ], $this->sut->getUserMails('user', 'NONVERIFIED'));
 
         $this->assertTrue($this->sut->setUserMailVerified('user', 'test3@email3.com', true));
@@ -1103,15 +1103,15 @@ class UsersManagerTest extends TestCase {
         $this->sut->saveUserMail('user2', 'user3@email3.com');
 
         $this->assertSame([
-                            ['mail' => 'test@email.com', 'isverified' => true],
                             ['mail' => 'test2@email2.com', 'isverified' => true],
-                            ['mail' => 'test3@email3.com', 'isverified' => true]
+                            ['mail' => 'test3@email3.com', 'isverified' => true],
+                            ['mail' => 'test@email.com', 'isverified' => true]
                           ], $this->sut->getUserMails('user'));
 
         $this->assertSame([
-                            ['mail' => 'user@email.com', 'isverified' => false],
                             ['mail' => 'user2@email2.com', 'isverified' => false],
-                            ['mail' => 'user3@email3.com', 'isverified' => false]
+                            ['mail' => 'user3@email3.com', 'isverified' => false],
+                            ['mail' => 'user@email.com', 'isverified' => false]
                           ], $this->sut->getUserMails('user2'));
 
         // Test wrong values
