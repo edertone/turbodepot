@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -21,12 +22,18 @@ import java.io.IOException;
  * <p>
  * Authentication errors are returned as a JSON object from {@link ErrorResponseDto} with status code 401 (Unauthorized).
  */
+@Component("TurboDepotApiAuthenticationFailureHelper")
 public class ApiAuthenticationFailureHelper implements AuthenticationFailureHandler, AuthenticationEntryPoint {
 
     private final Logger logger = LoggerFactory.getLogger(ApiAuthenticationFailureHelper.class);
 
     private final JsonMapper jsonMapper;
 
+    /**
+     * Default constructor.
+     *
+     * @param jsonMapper the JSON mapper
+     */
     public ApiAuthenticationFailureHelper(JsonMapper jsonMapper) {
         this.jsonMapper = jsonMapper;
     }

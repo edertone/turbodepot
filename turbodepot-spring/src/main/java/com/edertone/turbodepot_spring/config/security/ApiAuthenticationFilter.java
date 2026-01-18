@@ -1,7 +1,7 @@
 package com.edertone.turbodepot_spring.config.security;
 
 import com.edertone.turbodepot_spring.service.UserTokenService;
-import com.edertone.turbodepot_spring.support.web.WebConstants;
+import com.edertone.turbodepot_spring.support.util.WebUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 
-import static com.edertone.turbodepot_spring.support.web.WebUtils.requireParameter;
+import static com.edertone.turbodepot_spring.support.util.WebUtils.requireParameter;
 
 /**
  * Filter that handles authentication requests to the login URL.
@@ -40,6 +40,14 @@ public class ApiAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final UserTokenService userTokenService;
     private final JsonMapper jsonMapper;
 
+    /**
+     * Default constructor.
+     *
+     * @param authenticationManager        the authentication manager
+     * @param userTokenService
+     * @param authenticationFailureHandler
+     * @param jsonMapper
+     */
     public ApiAuthenticationFilter(
         AuthenticationManager authenticationManager,
         UserTokenService userTokenService,
@@ -50,7 +58,7 @@ public class ApiAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.userTokenService = userTokenService;
         this.jsonMapper = jsonMapper;
 
-        setFilterProcessesUrl(WebConstants.DEFAULT_AUTH_LOGIN_URL);
+        setFilterProcessesUrl(WebUtils.AUTH_LOGIN_URL);
         setAuthenticationFailureHandler(authenticationFailureHandler);
     }
 
@@ -66,9 +74,9 @@ public class ApiAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throw new AuthenticationServiceException("Content type not supported: " + request.getContentType());
         }
 
-        var username = requireParameter(request, WebConstants.DEFAULT_PARAM_USERNAME);
-        var tenant = requireParameter(request, WebConstants.DEFAULT_PARAM_TENANT);
-        var password = requireParameter(request, WebConstants.DEFAULT_PARAM_PASSWORD);
+        var username = requireParameter(request, WebUtils.PARAM_USERNAME);
+        var tenant = requireParameter(request, WebUtils.PARAM_TENANT);
+        var password = requireParameter(request, WebUtils.PARAM_PASSWORD);
 
         var preAuthentication = UsernameTenantPasswordAuthenticationToken.unauthenticated(username, password, tenant);
         return authenticationManager.authenticate(preAuthentication);

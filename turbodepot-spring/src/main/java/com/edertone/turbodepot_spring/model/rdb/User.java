@@ -11,8 +11,7 @@ import java.util.Set;
 /**
  * User entity.
  */
-@Entity
-@Table(name = "usr_userobject")
+@Entity(name = "TurboDepotUser")
 public class User extends CommonEntity<User> {
 
     @Id
@@ -31,7 +30,7 @@ public class User extends CommonEntity<User> {
     private String description;
 
     @Type(JsonType.class)
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "longtext")
     private Map<String, Object> data;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

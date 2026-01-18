@@ -13,6 +13,11 @@ description = 'TurboDepot Spring'
 
 ext {
     hypersistence_utils_version = '3.12.0'
+    spring_doc_version = '2.6.0'
+    jaxb_version = '2.3.1'
+    swagger_parser_version = '2.1.23'
+    mapstruct_version = '1.6.3'
+    mariadb_java_client_version = '3.5.6'
 }
 
 java {
@@ -46,9 +51,33 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-data-jpa'
     api 'org.springframework.boot:spring-boot-starter-security'
     api 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springframework.boot:spring-boot-starter-validation'
+    api 'org.springframework.boot:spring-boot-starter-flyway'
 
-    // JPA
+    // Persistence
     api "io.hypersistence:hypersistence-utils-hibernate-71:${project.hypersistence_utils_version}"
+    api 'org.flywaydb:flyway-mysql'
+    runtimeOnly "org.mariadb.jdbc:mariadb-java-client:${project.mariadb_java_client_version}"
+
+    // OpenAPI and Swagger
+    api "org.springdoc:springdoc-openapi-starter-webmvc-ui:${project.spring_doc_version}"
+    api "io.swagger.parser.v3:swagger-parser:${project.swagger_parser_version}"
+    api "javax.xml.bind:jaxb-api:${project.jaxb_version}"
+
+    // Utils
+    api "org.mapstruct:mapstruct:${project.mapstruct_version}"
+
+    // Annotation processors
+    annotationProcessor "org.mapstruct:mapstruct-processor:${project.mapstruct_version}"
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.h2database:h2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Test annotation processors
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${project.mapstruct_version}"
 }
 
 tasks.named('test') {

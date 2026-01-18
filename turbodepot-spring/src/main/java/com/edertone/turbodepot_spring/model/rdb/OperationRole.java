@@ -2,13 +2,11 @@ package com.edertone.turbodepot_spring.model.rdb;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 /**
  * Operation role entity.
  */
-@Entity
-@Table(name = "usr_operation_role")
+@Entity(name = "TurboDepotOperationRole")
 public class OperationRole {
 
     @EmbeddedId

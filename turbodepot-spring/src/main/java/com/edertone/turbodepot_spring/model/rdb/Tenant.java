@@ -3,13 +3,11 @@ package com.edertone.turbodepot_spring.model.rdb;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 /**
  * Tenant entity.
  */
-@Entity
-@Table(name = "usr_tenant")
+@Entity(name = "TurboDepotTenant")
 public class Tenant {
 
     @Id

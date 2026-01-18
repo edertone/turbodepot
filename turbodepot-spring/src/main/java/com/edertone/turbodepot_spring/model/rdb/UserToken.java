@@ -5,13 +5,9 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 /**
- * AuthUserToken entity.
+ * UserToken entity.
  */
-@Entity
-@Table(name = "usr_token",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "token" })
-    })
+@Entity(name = "TurboDepotUserToken")
 public class UserToken {
 
     @Id

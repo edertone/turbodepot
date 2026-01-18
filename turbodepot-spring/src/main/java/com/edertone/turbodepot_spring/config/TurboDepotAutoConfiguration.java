@@ -1,56 +1,36 @@
 package com.edertone.turbodepot_spring.config;
 
-import com.edertone.turbodepot_spring.model.dto.SystemVersionDto;
-import com.edertone.turbodepot_spring.service.SystemService;
-import com.edertone.turbodepot_spring.service.impl.SystemServiceImpl;
+import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.annotation.ComponentScan;
 
-import java.util.Properties;
+import javax.sql.DataSource;
+import java.util.Map;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for TurboDepot.
  */
-@Configuration
-@Import({ TurboDepotSecurityConfiguration.class, TurboDepotWebConfiguration.class })
+@AutoConfiguration
+@ComponentScan("com.edertone.turbodepot_spring")
 public class TurboDepotAutoConfiguration {
 
+    @Value("${turbodepot-spring.model.table-prefix:usr_}")
+    private String modelTablePrefix;
+
     @Bean
-    public SystemService systemService() {
-        return new SystemServiceImpl(getSystemVersionDto());
-    }
+    public Flyway flyway(DataSource dataSource) {
+        var flyway = Flyway.configure()
+            .dataSource(dataSource)
+            .locations("classpath:db/migration/turbodepot-spring")
+            .table("_schema_version_turbodepot_spring")
+            .placeholders(Map.of("table-prefix", modelTablePrefix))
+            .baselineOnMigrate(true)
+            .load();
+        flyway.migrate();
 
-    /**
-     * Extract the system version from the package version, and from the git.properties file. Values fallback to
-     * 'unknown' if there are no such properties.
-     *
-     * @return the system version information
-     */
-    private SystemVersionDto getSystemVersionDto() {
-        var version = getClass().getPackage().getImplementationVersion();
-        var properties = new Properties();
-
-        try {
-            var resource = new ClassPathResource("git.properties");
-            if (resource.exists()) {
-                properties.load(resource.getInputStream());
-            }
-        } catch (Exception e) {
-            // ignore - we'll keep default values
-        }
-
-        var gitCommit = properties.getProperty("git.commit.id.abbrev", "unknown");
-        var gitBranch = properties.getProperty("git.branch", "unknown");
-        var buildTime = properties.getProperty("git.build.time", "unknown");
-
-        return new SystemVersionDto(
-            version == null ? "unknown" : version,
-            gitCommit,
-            gitBranch,
-            buildTime
-        );
+        return flyway;
     }
 }

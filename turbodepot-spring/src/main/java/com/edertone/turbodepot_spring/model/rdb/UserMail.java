@@ -9,8 +9,7 @@ import java.util.Map;
 /**
  * User mail entity.
  */
-@Entity
-@Table(name = "usr_userobject_mail")
+@Entity(name = "TurboDepotUserMail")
 public class UserMail {
 
     @EmbeddedId
@@ -31,7 +30,7 @@ public class UserMail {
     private String comments;
 
     @Type(JsonType.class)
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "longtext")
     private Map<String, Object> data;
 
     public UserMailId getId() {

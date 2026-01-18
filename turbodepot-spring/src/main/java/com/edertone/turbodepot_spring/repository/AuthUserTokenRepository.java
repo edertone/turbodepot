@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * {@link UserToken} entity repository.
  */
-@Repository
+@Repository("TurboDepotAuthUserTokenRepository")
 public interface AuthUserTokenRepository extends JpaRepository<UserToken, Long>, JpaSpecificationExecutor<UserToken> {
 
     /**
@@ -19,6 +21,14 @@ public interface AuthUserTokenRepository extends JpaRepository<UserToken, Long>,
      * @return the number of deleted tokens
      */
     @Modifying
-    @Query("delete from UserToken ut where ut.expirationDate < current_timestamp")
+    @Query("delete from TurboDepotUserToken ut where ut.expirationDate < current_timestamp")
     int deleteExpiredTokens();
+
+    /**
+     * Find one user token by one token value.
+     *
+     * @param token the token value
+     * @return the user token
+     */
+    Optional<UserToken> findByToken(String token);
 }

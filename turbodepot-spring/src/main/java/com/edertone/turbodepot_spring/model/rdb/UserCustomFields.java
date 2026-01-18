@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 /**
  * User custom fields entity.
  */
-@Entity
-@Table(name = "usr_userobject_customfields")
+@Entity(name = "TurboDepotUserCustomFields")
 public class UserCustomFields {
 
     @Id

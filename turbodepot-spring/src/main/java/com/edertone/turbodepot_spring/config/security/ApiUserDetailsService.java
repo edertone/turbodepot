@@ -7,12 +7,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 /**
  * Custom {@link UserDetailsService} to load user details from the database.
  */
+@Component("TurboDepotUserDetailsService")
 public class ApiUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;

@@ -12,11 +12,11 @@ import java.util.Set;
 /**
  * {@link OperationRole} entity repository.
  */
-@Repository
+@Repository("TurboDepotOperationRoleRepository")
 public interface OperationRoleRepository extends JpaRepository<OperationRole, Long>, JpaSpecificationExecutor<OperationRole> {
 
     @Query("""
-        select opr from OperationRole opr
+        select opr from TurboDepotOperationRole opr
         where
             opr.id.role.id.name in :roles and
             opr.id.tenant.name = :tenant

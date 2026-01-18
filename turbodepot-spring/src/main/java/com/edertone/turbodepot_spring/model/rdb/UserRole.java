@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 /**
  * User role entity.
  */
-@Entity
-@Table(name = "usr_userobject_role")
+@Entity(name = "TurboDepotUserRole")
 public class UserRole {
 
     @EmbeddedId

@@ -23,7 +23,7 @@ public class UsernameTenantPasswordAuthenticationToken extends UsernamePasswordA
     }
 
     public static UsernameTenantPasswordAuthenticationToken unauthenticated(
-            Object principal, Object credentials, String tenant
+        Object principal, Object credentials, String tenant
     ) {
         return new UsernameTenantPasswordAuthenticationToken(principal, credentials, tenant);
     }

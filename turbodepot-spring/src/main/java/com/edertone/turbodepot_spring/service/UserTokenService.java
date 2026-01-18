@@ -1,6 +1,7 @@
 package com.edertone.turbodepot_spring.service;
 
 import com.edertone.turbodepot_spring.model.dto.AuthResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -19,7 +20,22 @@ public interface UserTokenService {
     AuthResponseDto createToAuthResponse(Authentication authentication);
 
     /**
+     * Extract an {@link Authentication} from a {@link HttpServletRequest}, if present.
+     *
+     * @param request the request
+     * @return the authentication or null
+     */
+    Authentication getAuthentication(HttpServletRequest request);
+
+    /**
      * Scheduled task to delete expired tokens.
      */
     void deleteExpiredTokens();
+
+    /**
+     * Delete one user token. This method does not fail if the token does not exist.
+     *
+     * @param token the user token
+     */
+    void deleteToken(String token);
 }

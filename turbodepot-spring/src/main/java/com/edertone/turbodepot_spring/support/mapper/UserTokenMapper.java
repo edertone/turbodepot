@@ -1,24 +1,37 @@
 package com.edertone.turbodepot_spring.support.mapper;
 
+import com.edertone.turbodepot_spring.config.security.ApiUserDetails;
 import com.edertone.turbodepot_spring.model.dto.AuthResponseDto;
 import com.edertone.turbodepot_spring.model.dto.AuthUserResponseDto;
 import com.edertone.turbodepot_spring.model.rdb.*;
+import com.edertone.turbodepot_spring.support.util.WebUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * Mapper for {@link UserToken}.
  */
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Component("TurboDepotUserTokenMapper")
 public interface UserTokenMapper {
 
     /**
      * Map an authentication and an auth user token to an auth response dto.
      *
      * @param authentication the authentication
-     * @param userToken  the auth user token
+     * @param token          the auth user token
      * @return the auth response dto
      */
-    default AuthResponseDto toAuthResponseDto(Authentication authentication, UserToken userToken) {
-        var user = userToken.getUser();
+    default AuthResponseDto toAuthResponseDto(Authentication authentication, String token) {
+        var apiUserDetails = (ApiUserDetails) authentication.getPrincipal();
+        var user = apiUserDetails.getUser();
         var roles = user.getRoles().stream().map(UserRole::getId).map(UserRoleId::getValue).sorted().toList();
         var emails = user.getMails().stream().map(UserMail::getId).map(UserMailId::getMail).sorted().toList();
 
@@ -32,8 +45,24 @@ public interface UserTokenMapper {
         );
 
         return new AuthResponseDto(
-            userToken.getToken(),
+            token,
             userResponse,
-            authentication.getAuthorities().stream().map(Object::toString).toList());
+            authentication.getAuthorities().stream().filter(SimpleGrantedAuthority.class::isInstance).map(Object::toString).toList());
+    }
+
+    /**
+     * Extracts the token from a request. The token must be in the Authorization header and optionally start with
+     * {@link WebUtils#TOKEN_PREFIX}.
+     * <p>
+     * If there is no such header, null is returned.
+     *
+     * @param source the request
+     * @return the token or null
+     */
+    default String toToken(HttpServletRequest source) {
+        return Optional
+            .ofNullable(source.getHeader(HttpHeaders.AUTHORIZATION))
+            .map(value -> value.replace(WebUtils.TOKEN_PREFIX, ""))
+            .orElse(null);
     }
 }

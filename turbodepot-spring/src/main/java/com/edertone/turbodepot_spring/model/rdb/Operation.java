@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 /**
  * Operation entity.
  */
-@Entity
-@Table(name = "usr_operation")
+@Entity(name = "TurboDepotOperation")
 public class Operation {
 
     @EmbeddedId

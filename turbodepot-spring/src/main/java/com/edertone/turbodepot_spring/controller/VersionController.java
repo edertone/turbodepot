@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/public/version")
+@RestController("TurboDepotVersionController")
+@RequestMapping("/api/public/version")
 public class VersionController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

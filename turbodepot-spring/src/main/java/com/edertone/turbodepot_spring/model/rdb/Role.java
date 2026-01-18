@@ -3,13 +3,11 @@ package com.edertone.turbodepot_spring.model.rdb;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 /**
  * Role entity.
  */
-@Entity
-@Table(name = "usr_role")
+@Entity(name = "TurboDepotRole")
 public class Role {
 
     @EmbeddedId

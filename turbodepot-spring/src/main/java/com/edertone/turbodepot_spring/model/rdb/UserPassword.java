@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 /**
  * User password entity.
  */
-@Entity
-@Table(name = "usr_userobject_password")
+@Entity(name = "TurboDepotUserPassword")
 public class UserPassword {
 
     @Id
